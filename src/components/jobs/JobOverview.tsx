@@ -9,59 +9,48 @@ interface JobOverviewProps {
 
 export default function JobOverview({ job }: JobOverviewProps) {
     return (
-        <View style={{ paddingHorizontal: 18, marginTop: 18, gap: 14 }}>
+        <View className="px-[18px] mt-[18px] gap-[14px]">
             {/* Budget Card */}
-            <View
-                style={{
-                    borderRadius: 18,
-                    padding: 18,
-                    backgroundColor: "#2563EB",
-                    shadowColor: "#2563EB",
-                    shadowOpacity: 0.25,
-                    shadowRadius: 14,
-                    elevation: 5,
-                }}
-            >
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <View className="rounded-[18px] p-[18px] bg-primary shadow-primary/25 shadow-md elevation-5">
+                <View className="flex-row items-center gap-2">
                     <View
-                        style={{
-                            width: 10,
-                            height: 10,
-                            borderRadius: 10,
-                            backgroundColor: job.status === 'Active' ? "#22C55E" : "#fbbf24",
-                        }}
+                        className={`w-2.5 h-2.5 rounded-[10px] ${job.status === 'Active' ? "bg-[#22C55E]" : "bg-[#fbbf24]"
+                            }`}
                     />
-                    <Text style={{ color: job.status === 'Active' ? "#22C55E" : "#fbbf24", fontSize: 12, fontWeight: "700" }}>
+                    <Text
+                        className={`text-xs font-bold ${job.status === 'Active' ? "text-[#22C55E]" : "text-[#fbbf24]"
+                            }`}
+                    >
                         {job.status}
                     </Text>
                 </View>
 
-                <Text style={{ marginTop: 18, color: "#DCE7FF", fontSize: 12 }}>
+                <Text className="mt-[18px] text-[#DCE7FF] text-xs">
                     Salary / Budget
                 </Text>
 
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                    <Text style={{ color: "#DCE7FF", fontSize: 16, fontWeight: "800" }}>
+                <View className="flex-row items-center gap-2">
+                    <Text className="text-[#DCE7FF] text-base font-extrabold">
                         $
                     </Text>
-                    <Text style={{ color: "#fff", fontSize: 22, fontWeight: "900" }}>
+                    <Text className="text-white text-[22px] font-black">
                         {job.salary || "N/A"}
                     </Text>
                 </View>
             </View>
 
             {/* Small Cards Row */}
-            <View style={{ flexDirection: "row", gap: 12 }}>
+            <View className="flex-row gap-3">
                 <MiniInfoCard
                     icon="location-outline"
-                    iconBg="#E9FFF2"
+                    iconBg="bg-[#E9FFF2]"
                     iconColor="#16A34A"
                     label="Location"
                     value="Remote" // Location removed from model, using placeholder
                 />
                 <MiniInfoCard
                     icon="time-outline"
-                    iconBg="#FFF6E6"
+                    iconBg="bg-[#FFF6E6]"
                     iconColor="#F59E0B"
                     label="Created"
                     value={new Date(job.created_at).toLocaleDateString()}
@@ -74,14 +63,8 @@ export default function JobOverview({ job }: JobOverviewProps) {
                 icon="person-outline"
                 iconColor="#2563EB"
             >
-                <View
-                    style={{
-                        backgroundColor: "#F3F6FB",
-                        padding: 14,
-                        borderRadius: 14,
-                    }}
-                >
-                    <Text style={{ fontSize: 13, fontWeight: "600", color: "#111827" }}>
+                <View className="bg-[#F3F6FB] p-[14px] rounded-[14px]">
+                    <Text className="text-[13px] font-semibold text-gray-900">
                         {job.company}
                     </Text>
                 </View>
@@ -89,44 +72,25 @@ export default function JobOverview({ job }: JobOverviewProps) {
 
             {/* Description */}
             <SectionCard title="Description">
-                <Text style={{ fontSize: 12, color: "#6B7280", lineHeight: 18 }}>
+                <Text className="text-xs text-gray-500 leading-[18px]">
                     {job.description || "No description provided."}
                 </Text>
             </SectionCard>
 
             {/* Sync Status */}
-            <View
-                style={{
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: 16,
-                    padding: 14,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.05,
-                    shadowRadius: 10,
-                    elevation: 2,
-                }}
-            >
+            <View className="bg-white rounded-2xl p-[14px] flex-row items-center gap-2.5 shadow-black/5 shadow-sm elevation-2">
                 <View
-                    style={{
-                        width: 34,
-                        height: 34,
-                        borderRadius: 14,
-                        backgroundColor: job.synced ? "#E9FFF2" : "#FEF3C7", // Green or Yellow
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
+                    className={`w-[34px] h-[34px] rounded-[14px] items-center justify-center ${job.synced ? "bg-[#E9FFF2]" : "bg-[#FEF3C7]" // Green or Yellow
+                        }`}
                 >
                     <Ionicons name={job.synced ? "cloud-done-outline" : "cloud-offline-outline"} size={18} color={job.synced ? "#16A34A" : "#D97706"} />
                 </View>
 
                 <View>
-                    <Text style={{ fontSize: 13, fontWeight: "700", color: "#111827" }}>
+                    <Text className="text-[13px] font-bold text-gray-900">
                         {job.synced ? "Synced" : "Pending Sync"}
                     </Text>
-                    <Text style={{ fontSize: 11, color: "#6B7280", marginTop: 1 }}>
+                    <Text className="text-[11px] text-gray-500 mt-px">
                         {job.synced ? "All changes synced" : "Changes waiting for connection"}
                     </Text>
                 </View>
@@ -139,7 +103,7 @@ export default function JobOverview({ job }: JobOverviewProps) {
 
 interface MiniInfoCardProps {
     icon: any;
-    iconBg: string;
+    iconBg: string; // Expecting a Tailwind class now, e.g., "bg-[#E9FFF2]"
     iconColor: string;
     label: string;
     value: string;
@@ -147,35 +111,15 @@ interface MiniInfoCardProps {
 
 function MiniInfoCard({ icon, iconBg, iconColor, label, value }: MiniInfoCardProps) {
     return (
-        <View
-            style={{
-                flex: 1,
-                backgroundColor: "#FFFFFF",
-                borderRadius: 16,
-                padding: 14,
-                shadowColor: "#000",
-                shadowOpacity: 0.05,
-                shadowRadius: 10,
-                elevation: 2,
-            }}
-        >
-            <View
-                style={{
-                    width: 34,
-                    height: 34,
-                    borderRadius: 14,
-                    backgroundColor: iconBg,
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
+        <View className="flex-1 bg-white rounded-2xl p-[14px] shadow-black/5 shadow-sm elevation-2">
+            <View className={`w-[34px] h-[34px] rounded-[14px] items-center justify-center ${iconBg}`}>
                 <Ionicons name={icon} size={18} color={iconColor} />
             </View>
 
-            <Text style={{ marginTop: 10, fontSize: 11, color: "#6B7280" }}>
+            <Text className="mt-2.5 text-[11px] text-gray-500">
                 {label}
             </Text>
-            <Text style={{ marginTop: 2, fontSize: 13, fontWeight: "800", color: "#111827" }}>
+            <Text className="mt-0.5 text-[13px] font-extrabold text-gray-900">
                 {value}
             </Text>
         </View>
@@ -191,39 +135,20 @@ interface SectionCardProps {
 
 function SectionCard({ title, icon, iconColor, children }: SectionCardProps) {
     return (
-        <View
-            style={{
-                backgroundColor: "#FFFFFF",
-                borderRadius: 16,
-                padding: 14,
-                shadowColor: "#000",
-                shadowOpacity: 0.05,
-                shadowRadius: 10,
-                elevation: 2,
-            }}
-        >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <View className="bg-white rounded-2xl p-[14px] shadow-black/5 shadow-sm elevation-2">
+            <View className="flex-row items-center gap-2">
                 {icon ? (
-                    <View
-                        style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: 10,
-                            backgroundColor: "#EEF4FF",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
+                    <View className="w-8 h-8 rounded-[10px] bg-[#EEF4FF] items-center justify-center">
                         <Ionicons name={icon} size={18} color={iconColor} />
                     </View>
                 ) : null}
 
-                <Text style={{ fontSize: 14, fontWeight: "800", color: "#111827" }}>
+                <Text className="text-sm font-extrabold text-gray-900">
                     {title}
                 </Text>
             </View>
 
-            <View style={{ marginTop: 12 }}>{children}</View>
+            <View className="mt-3">{children}</View>
         </View>
     );
 }

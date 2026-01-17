@@ -41,7 +41,7 @@ export default function JobDetailsScreen() {
 
     if (loading) {
         return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View className="flex-1 justify-center items-center">
                 <ActivityIndicator size="large" color="#2563EB" />
             </View>
         );
@@ -49,10 +49,10 @@ export default function JobDetailsScreen() {
 
     if (!job) {
         return (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View className="flex-1 justify-center items-center">
                 <Text>Job not found</Text>
-                <TouchableOpacity onPress={() => router.back()} style={{ marginTop: 10 }}>
-                    <Text style={{ color: "#2563EB" }}>Go Back</Text>
+                <TouchableOpacity onPress={() => router.back()} className="mt-2.5">
+                    <Text className="text-primary">Go Back</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -72,35 +72,18 @@ export default function JobDetailsScreen() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#F6F9FF" }}>
+        <SafeAreaView className="flex-1 bg-background" style={{ backgroundColor: "#F6F9FF" }}>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 30 }}
             >
                 {/* Header */}
-                <View style={{ paddingHorizontal: 18, paddingTop: 10 }}>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                        }}
-                    >
+                <View className="px-[18px] pt-2.5">
+                    <View className="flex-row items-center justify-between">
                         {/* Back */}
                         <TouchableOpacity
                             onPress={() => router.back()}
-                            style={{
-                                width: 38,
-                                height: 38,
-                                borderRadius: 20,
-                                backgroundColor: "#FFFFFF",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                shadowColor: "#000",
-                                shadowOpacity: 0.05,
-                                shadowRadius: 10,
-                                elevation: 2,
-                            }}
+                            className="w-[38px] h-[38px] rounded-[20px] bg-white items-center justify-center shadow-black/5 shadow-sm elevation-2"
                         >
                             <Ionicons name="arrow-back" size={20} color="#111" />
                         </TouchableOpacity>
@@ -108,37 +91,26 @@ export default function JobDetailsScreen() {
                         {/* Edit Button */}
                         <TouchableOpacity
                             onPress={() => router.push(`/jobs/edit/${job.id}`)}
-                            style={{
-                                backgroundColor: "#2563EB",
-                                paddingHorizontal: 14,
-                                paddingVertical: 7,
-                                borderRadius: 16,
-                            }}
+                            className="bg-primary px-3.5 py-1.5 rounded-2xl"
                         >
-                            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 13 }}>
+                            <Text className="text-white font-bold text-[13px]">
                                 Edit
                             </Text>
                         </TouchableOpacity>
                     </View>
 
                     {/* Title + subtitle */}
-                    <View style={{ marginTop: 10 }}>
-                        <Text style={{ fontSize: 18, fontWeight: "800", color: "#111827" }}>
+                    <View className="mt-2.5">
+                        <Text className="text-lg font-extrabold text-gray-900">
                             {job.title}
                         </Text>
-                        <Text style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>
+                        <Text className="text-xs text-gray-500 mt-0.5">
                             {job.company}
                         </Text>
                     </View>
 
                     {/* Tabs */}
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            gap: 10,
-                            marginTop: 12,
-                        }}
-                    >
+                    <View className="flex-row gap-2.5 mt-3">
                         <TabButton
                             label="Overview"
                             icon="document-text-outline"
@@ -183,15 +155,8 @@ function TabButton({ label, icon, activeTab, onPress }: TabButtonProps) {
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={0.9}
-            style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 6,
-                paddingHorizontal: 12,
-                paddingVertical: 8,
-                borderRadius: 16,
-                backgroundColor: isActive ? "#EEF4FF" : "transparent",
-            }}
+            className={`flex-row items-center gap-1.5 px-3 py-2 rounded-2xl ${isActive ? "bg-[#EEF4FF]" : "bg-transparent"
+                }`}
         >
             <Ionicons
                 name={icon}
@@ -199,11 +164,8 @@ function TabButton({ label, icon, activeTab, onPress }: TabButtonProps) {
                 color={isActive ? "#2563EB" : "#6B7280"}
             />
             <Text
-                style={{
-                    fontSize: 12,
-                    fontWeight: "700",
-                    color: isActive ? "#2563EB" : "#6B7280",
-                }}
+                className={`text-xs font-bold ${isActive ? "text-primary" : "text-gray-500"
+                    }`}
             >
                 {label}
             </Text>

@@ -52,39 +52,18 @@ export default function JobNotes({ jobId }: JobNotesProps) {
     };
 
     return (
-        <View style={{ paddingHorizontal: 18, marginTop: 18, gap: 14 }}>
+        <View className="px-[18px] mt-[18px] gap-[14px]">
             {/* Add Note Card */}
-            <View
-                style={{
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: 18,
-                    padding: 16,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.05,
-                    shadowRadius: 10,
-                    elevation: 2,
-                }}
-            >
-                <View
-                    style={{
-                        backgroundColor: "#F3F6FB",
-                        borderRadius: 16,
-                        paddingHorizontal: 12,
-                        paddingVertical: 12,
-                    }}
-                >
+            <View className="bg-white rounded-[18px] p-4 shadow-black/5 shadow-sm elevation-2">
+                <View className="bg-[#F3F6FB] rounded-2xl px-3 py-3">
                     <TextInput
                         placeholder="Add a new note..."
                         placeholderTextColor="#9CA3AF"
                         value={noteText}
                         onChangeText={setNoteText}
                         multiline
-                        style={{
-                            minHeight: 70,
-                            fontSize: 13,
-                            color: "#111827",
-                            textAlignVertical: "top",
-                        }}
+                        className="min-h-[70px] text-[13px] text-gray-900"
+                        style={{ textAlignVertical: "top" }}
                     />
                 </View>
 
@@ -92,27 +71,15 @@ export default function JobNotes({ jobId }: JobNotesProps) {
                     activeOpacity={0.9}
                     onPress={handleAddNote}
                     disabled={isSubmitting}
-                    style={{
-                        marginTop: 12,
-                        height: 46,
-                        borderRadius: 16,
-                        backgroundColor: isSubmitting ? "#93C5FD" : "#2563EB",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        shadowColor: "#2563EB",
-                        shadowOpacity: 0.25,
-                        shadowRadius: 10,
-                        elevation: 4,
-                        flexDirection: "row",
-                        gap: 8,
-                    }}
+                    className={`mt-3 h-[46px] rounded-2xl items-center justify-center flex-row gap-2 shadow-primary/25 shadow-md elevation-4 ${isSubmitting ? "bg-blue-300" : "bg-primary"
+                        }`}
                 >
                     {isSubmitting ? (
                         <ActivityIndicator size="small" color="#fff" />
                     ) : (
                         <>
                             <Ionicons name="add" size={18} color="#fff" />
-                            <Text style={{ color: "#fff", fontSize: 13, fontWeight: "800" }}>
+                            <Text className="text-white text-[13px] font-extrabold">
                                 Add Note
                             </Text>
                         </>
@@ -122,9 +89,9 @@ export default function JobNotes({ jobId }: JobNotesProps) {
 
             {/* Notes List */}
             {loading ? (
-                <ActivityIndicator size="small" color="#2563EB" style={{ marginTop: 20 }} />
+                <ActivityIndicator size="small" color="#2563EB" className="mt-5" />
             ) : notes.length === 0 ? (
-                <Text style={{ textAlign: "center", color: "#6B7280", marginTop: 20 }}>
+                <Text className="text-center text-gray-500 mt-5">
                     No notes yet.
                 </Text>
             ) : (
@@ -134,38 +101,16 @@ export default function JobNotes({ jobId }: JobNotesProps) {
             )}
 
             {/* Sync Status - Static for now or we could derive from notes sync status */}
-            <View
-                style={{
-                    backgroundColor: "#FFFFFF",
-                    borderRadius: 16,
-                    padding: 14,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    shadowColor: "#000",
-                    shadowOpacity: 0.05,
-                    shadowRadius: 10,
-                    elevation: 2,
-                }}
-            >
-                <View
-                    style={{
-                        width: 34,
-                        height: 34,
-                        borderRadius: 14,
-                        backgroundColor: "#E9FFF2",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
+            <View className="bg-white rounded-2xl p-[14px] flex-row items-center gap-2.5 shadow-black/5 shadow-sm elevation-2">
+                <View className="w-[34px] h-[34px] rounded-[14px] bg-[#E9FFF2] items-center justify-center">
                     <Ionicons name="wifi-outline" size={18} color="#16A34A" />
                 </View>
 
                 <View>
-                    <Text style={{ fontSize: 13, fontWeight: "800", color: "#111827" }}>
+                    <Text className="text-[13px] font-extrabold text-gray-900">
                         Sync Status
                     </Text>
-                    <Text style={{ fontSize: 11, color: "#6B7280", marginTop: 1 }}>
+                    <Text className="text-[11px] text-gray-500 mt-px">
                         Notes synced to local DB
                     </Text>
                 </View>
