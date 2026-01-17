@@ -1,98 +1,86 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import React from "react";
+import { View, Text, Pressable, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import JobCard from "../../src/components/jobs/JobCard";
+import AppSearchBar from "../../src/components/common/AppSearchBar";
+import HomeHeader from "../../src/components/home/HomeHeader";
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const jobs = [
+    {
+      title: "Kitchen Renovation",
+      client: "Sarah Johnson",
+      amount: "$45,000",
+      location: "San Francisco",
+      date: "Started Dec 15, 2024",
+      status: "Active",
+    },
+    {
+      title: "Bathroom Remodel",
+      client: "Michael Chen",
+      amount: "$28,000",
+      location: "Oakland",
+      date: "Started Jan 5, 2025",
+      status: "Pending",
+    },
+    {
+      title: "Deck Construction",
+      client: "Emily Rodriguez",
+      amount: "$15,000",
+      location: "Berkeley",
+      date: "Started Nov 1, 2024",
+      status: "Completed",
+    },
+  ];
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <View className="flex-1 bg-background">
+      <View className="px-6 pt-14 pb-5 bg-white">
+        <HomeHeader userName="Abhi" />
+
+        {/* Search Bar */}
+        <AppSearchBar
+          containerStyle="mt-4"
+          placeholder="Search jobs..."
+        />
+      </View>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 90 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Your Jobs */}
+        <View className="px-6 pt-6">
+          <View className="flex-row items-center justify-between mb-4">
+            <Text className="text-lg font-semibold text-gray-900">
+              Your Jobs ({jobs.length})
+            </Text>
+            <Pressable>
+              <Text className="text-blue-500 font-medium">View All</Text>
+            </Pressable>
+          </View>
+
+          {/* Cards */}
+          {jobs.map((job, index) => (
+            <JobCard key={index} job={job} />
+          ))}
+        </View>
+      </ScrollView>
+
+      {/* Floating Plus Button */}
+      <Pressable
+        className="absolute right-6 bottom-8 w-16 h-16 rounded-full bg-blue-500 items-center justify-center"
+        style={{
+          shadowColor: "#000",
+          shadowOpacity: 0.2,
+          shadowRadius: 12,
+          shadowOffset: { width: 0, height: 6 },
+          elevation: 6,
+        }}
+        onPress={() => console.log("Add Job")}
+      >
+        <Ionicons name="add" size={28} color="white" />
+      </Pressable>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
