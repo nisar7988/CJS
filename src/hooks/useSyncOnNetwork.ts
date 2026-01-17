@@ -3,20 +3,20 @@ import { AppState } from 'react-native';
 import { useNetworkStore } from '../store/network.store';
 import { SyncManager } from '../sync/syncManager';
 
-export const useSyncOnNetwork = () => {
+export const useSyncOnNetwork = (enabled: boolean = true) => {
     const isOnline = useNetworkStore((state) => state.isOnline);
 
     useEffect(() => {
-        if (isOnline) {
+        if (isOnline && enabled) {
             SyncManager.processQueue();
         }
-    }, [isOnline]);
+    }, [isOnline, enabled]);
 };
 
-export const useSyncOnForeground = () => {
+export const useSyncOnForeground = (enabled: boolean = true) => {
     useEffect(() => {
         const subscription = AppState.addEventListener('change', (nextAppState) => {
-            if (nextAppState === 'active') {
+            if (nextAppState === 'active' && enabled) {
                 SyncManager.processQueue();
             }
         });
@@ -24,5 +24,5 @@ export const useSyncOnForeground = () => {
         return () => {
             subscription.remove();
         };
-    }, []);
+    }, [enabled]);
 };

@@ -32,8 +32,8 @@ export default function RootLayout() {
   }, []);
 
   // Global Sync Hooks
-  useSyncOnNetwork();
-  useSyncOnForeground();
+  useSyncOnNetwork(isReady);
+  useSyncOnForeground(isReady);
 
   useEffect(() => {
     if (!isReady) return;
