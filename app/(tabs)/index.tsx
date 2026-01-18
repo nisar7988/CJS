@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, ScrollView, RefreshControl } from "react-native";
+import { View, Text } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 // import JobCard from "../../src/components/jobs/JobCard";
 import AppSearchBar from "../../src/components/common/AppSearchBar";
@@ -7,7 +7,7 @@ import HomeHeader from "../../src/components/home/HomeHeader";
 import { JobsRepo } from "../../src/db/repositories/jobs.repo";
 import { Job } from "../../src/types/models";
 import { FAB } from "../../src/components/common/FAB";
-import JobsList from "../(main)/jobs";
+import { JobList } from "../../src/components/jobs/JobList";
 import { useAuthStore } from "@/store/auth.store";
 
 export default function HomeScreen() {
@@ -43,26 +43,21 @@ export default function HomeScreen() {
           placeholder="Search jobs..."
         />
       </View>
-      <ScrollView
-        className="flex-1"
+      <JobList
+        jobs={jobs}
+        loading={loading}
+        onRefresh={loadJobs}
         contentContainerStyle={{ paddingBottom: 90 }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={loadJobs} />
-        }
-      >
-        {/* Your Jobs */}
-        <View className="px-6 pt-6">
-          <View className="flex-row items-center justify-between mb-4">
-            <Text className="text-lg font-semibold text-gray-900">
-              Your Jobs ({jobs.length})
-            </Text>
-
+        ListHeaderComponent={
+          <View className="px-6 pt-6">
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-lg font-semibold text-gray-900">
+                Your Jobs ({jobs.length})
+              </Text>
+            </View>
           </View>
-
-          <JobsList />
-        </View>
-      </ScrollView>
+        }
+      />
 
       {/* Floating Plus Button */}
       <FAB onPress={() => router.push("/jobs/create")} />
