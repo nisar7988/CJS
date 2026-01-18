@@ -7,6 +7,8 @@ import HomeHeader from "../../src/components/home/HomeHeader";
 import { JobsRepo } from "../../src/db/repositories/jobs.repo";
 import { Job } from "../../src/types/models";
 import { FAB } from "../../src/components/common/FAB";
+import JobsList from "../(main)/jobs";
+import { useAuthStore } from "@/store/auth.store";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -29,11 +31,11 @@ export default function HomeScreen() {
       loadJobs();
     }, [])
   );
-
+  const user = useAuthStore((state) => state.user);
   return (
     <View className="flex-1 bg-background">
       <View className="px-6 pt-14 pb-5 bg-white">
-        <HomeHeader userName="Abhi" />
+        <HomeHeader userName={user?.name} />
 
         {/* Search Bar */}
         <AppSearchBar
@@ -55,19 +57,10 @@ export default function HomeScreen() {
             <Text className="text-lg font-semibold text-gray-900">
               Your Jobs ({jobs.length})
             </Text>
-            <Pressable onPress={() => router.push("/jobs")}>
-              <Text className="text-blue-500 font-medium">View All</Text>
-            </Pressable>
+
           </View>
 
-          {/* Cards */}
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              onPress={() => router.push(`/jobs/${job.id}`)}
-            />
-          ))}
+          <JobsList />
         </View>
       </ScrollView>
 

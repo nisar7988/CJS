@@ -29,7 +29,7 @@ export default function LoginScreen() {
 
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior={'padding'}
             className="flex-1"
         >
             <View className="flex-1 justify-center p-6 bg-background">
@@ -59,14 +59,13 @@ export default function LoginScreen() {
                         keyboardType="email-address"
                     />
 
-                    {/* ✅ Password with Eye Button */}
                     <View className="relative">
                         <AppInput
                             label="Password"
                             placeholder="••••••"
                             value={password}
                             onChangeText={setPassword}
-                            secureTextEntry={!showPassword} // ✅ toggle here
+                            secureTextEntry={!showPassword}
                         />
 
                         <TouchableOpacity

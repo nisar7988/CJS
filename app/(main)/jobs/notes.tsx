@@ -220,7 +220,6 @@ export default function JobNotesScreen() {
                             ))
                         )}
 
-                        {/* Sync Status - Static for now or we could derive from notes sync status */}
                         <View
                             style={{
                                 backgroundColor: "#FFFFFF",
@@ -264,20 +263,10 @@ export default function JobNotesScreen() {
     );
 }
 
-/* ------------------ Components ------------------ */
 
 function TabButton({ label, icon, activeTab, onPress }: { label: string, icon: any, activeTab: string, onPress: () => void }) {
     const isActive = activeTab === label;
 
-    // Highlight Notes implicitly if activeTab is Notes, effectively
-    // But since we are navigating, highlighting might be handled by the current page logic
-    // For this screen, 'Notes' is always active logic-wise if we consider it a separate route for Notes
-    // But the UI pattern seems to be persistent tabs.
-    // Given we are on "Notes" screen, we should probably force highlighting "Notes"
-
-    // Actually, refactoring the previous activeTab state in component:
-    // const [activeTab, setActiveTab] = useState("Notes");
-    // This is fine.
 
     return (
         <TouchableOpacity

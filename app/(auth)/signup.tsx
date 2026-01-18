@@ -32,7 +32,7 @@ export default function SignupScreen() {
 
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior={'padding'}
             className="flex-1"
         >
             <View className="flex-1 justify-center p-6 bg-background">

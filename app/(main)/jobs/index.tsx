@@ -7,6 +7,7 @@ import { EmptyState } from '../../../src/components/common/EmptyState';
 import JobCard from '../../../src/components/jobs/JobCard';
 import { Loader } from '../../../src/components/common/Loader';
 import { FAB } from '../../../src/components/common/FAB';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function JobsList() {
     const router = useRouter();
@@ -43,22 +44,18 @@ export default function JobsList() {
     }
 
     return (
-        <View className="flex-1 bg-background px-4 pt-4">
-            <FlatList
-                data={jobs}
-                keyExtractor={item => item.id}
-                renderItem={renderItem}
-                ListEmptyComponent={<EmptyState message="No jobs found. Tap + to add one." />}
-                refreshControl={
-                    <RefreshControl refreshing={loading} onRefresh={loadJobs} />
-                }
-                contentContainerStyle={{ paddingBottom: 80 }}
-                showsVerticalScrollIndicator={false}
-            />
+        <FlatList
+            data={jobs}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            ListEmptyComponent={<EmptyState message="No jobs found. Tap + to add one." />}
+            refreshControl={
+                <RefreshControl refreshing={loading} onRefresh={loadJobs} />
+            }
+            contentContainerStyle={{ paddingBottom: 80 }}
+            showsVerticalScrollIndicator={false}
+        />
 
-            <FAB
-                onPress={() => router.push('/jobs/create')}
-            />
-        </View>
+
     );
 }
