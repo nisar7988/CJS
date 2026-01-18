@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import {
     View,
     Text,
-    SafeAreaView,
     ScrollView,
     TouchableOpacity,
     ActivityIndicator
@@ -14,6 +13,7 @@ import { Job } from "../../../src/types/models";
 import JobOverview from "../../../src/components/jobs/JobOverview";
 import JobNotes from "../../../src/components/jobs/JobNotes";
 import JobVideo from "../../../src/components/jobs/JobVideo";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function JobDetailsScreen() {
     const router = useRouter();

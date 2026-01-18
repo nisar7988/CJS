@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import {
     View,
     Text,
-    SafeAreaView,
     ScrollView,
     TouchableOpacity,
     TextInput,
@@ -13,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import { JobsRepo } from "../../../../src/db/repositories/jobs.repo";
 import { Job } from "../../../../src/types/models";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EditJobScreen() {
     const router = useRouter();

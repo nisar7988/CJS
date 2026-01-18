@@ -55,7 +55,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
       <OfflineBanner />
       <Slot />
     </SafeAreaProvider>
