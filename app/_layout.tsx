@@ -8,6 +8,7 @@ import { useSyncOnNetwork, useSyncOnForeground } from '../src/hooks/useSyncOnNet
 import { OfflineBanner } from '../src/components/status/OfflineBanner';
 import { Loader } from '../src/components/common/Loader';
 import '../global.css';
+import { JobsApi } from '@/api/jobs.api';
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);

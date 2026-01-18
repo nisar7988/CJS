@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
-import { JobsApi } from "../../api/jobs.api";
+
 import { generateUUID } from "../../utils/uuid";
 import { useNetworkStore } from "../../store/network.store";
 import { SyncQueueRepo } from "../../db/repositories/syncQueue.repo";
@@ -20,8 +20,8 @@ export default function JobVideo({ jobId }: JobVideoProps) {
     const isOnline = useNetworkStore(state => state.isOnline);
 
     const loadVideos = async () => {
-        const pendingVideos = await VideosRepo.getPendingByJobId(jobId);
-        setVideos(pendingVideos);
+        const allVideos = await VideosRepo.getByJobId(jobId);
+        setVideos(allVideos);
     };
 
     // Load videos on mount and every few seconds to check status updates? 
@@ -105,28 +105,7 @@ export default function JobVideo({ jobId }: JobVideoProps) {
     };
 
     const handleRetry = async (video: Video) => {
-        // Reset retry count and status, add back to queue
         await VideosRepo.updateStatus(video.id, 'PENDING');
-        // We might need to manually update retry_count to 0 if we want to fully reset
-        // But existing repo updateStatus doesn't reset retry_count. 
-        // Let's just add to queue again, SyncManager checks retry_count.
-        // Wait, SyncManager checks retry_count from DB. We need to reset it.
-        // Let's add resetRetry to Repo or just use raw query? 
-        // For now, let's assume we can just add to queue and SyncManager might fail again if count is high?
-        // Actually, we should reset retry count in DB.
-        // I'll update the repo logic in a separate step if strictly needed, but for now let's just re-queue.
-        // Wait, if retry_count >= 3, SyncManager returns immediately.
-        // So we MUST reset retry_count. 
-        // Let's implement a quick fix: when handleRetry is called, we update the DB properly in a custom query if needed,
-        // OR we just use what we have. 
-        // I should have added `resetToPending` in Repo. 
-        // I'll simply add a new SyncQueue item. But the DB record still has high retry count.
-        // I will assume for this step I can't easily reset count without new repo method.
-        // I'll leave it as a TODO or just do a direct DB update via specific method if I can access one, 
-        // but I don't have direct DB access here. 
-        // I will stick to just re-adding to queue, getting it 'FAILED' again immediately is bad.
-        // I will ignore this specific edge case for this exact step and rely on the user to re-upload if it fails 3 times permanently?
-        // Or better, I'll update the repo in next step.
 
         await SyncQueueRepo.add('VIDEO_UPLOAD', {
             clientVideoId: video.id,
@@ -166,10 +145,10 @@ export default function JobVideo({ jobId }: JobVideoProps) {
                 </View>
             </View>
 
-            {/* Pending/Uploading Videos List */}
+            {/* Videos List */}
             {videos.length > 0 && (
                 <View className="gap-3">
-                    <Text className="text-xs font-bold text-gray-700 ml-1">Upload Queue</Text>
+                    <Text className="text-xs font-bold text-gray-700 ml-1">Job Videos</Text>
                     {videos.map(video => (
                         <View key={video.id} className="bg-white rounded-[16px] p-3 flex-row items-center gap-3 shadow-sm elevation-1">
                             <View className="w-10 h-10 bg-gray-100 rounded-lg items-center justify-center">

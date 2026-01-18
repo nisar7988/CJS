@@ -5,6 +5,8 @@ import { JobsRepo } from '../db/repositories/jobs.repo';
 import { NotesApi } from '../api/notes.api';
 import { NotesRepo } from '../db/repositories/notes.repo';
 import { SyncItem } from '../types/models';
+import { VideosRepo } from '../db/repositories/videos.repo';
+import { Alert } from 'react-native';
 
 let isSyncing = false;
 
@@ -90,8 +92,6 @@ const syncNotes = async (item: SyncItem) => {
 };
 
 // Video Sync Logic
-import { VideosRepo } from '../db/repositories/videos.repo';
-
 const syncVideos = async (item: SyncItem) => {
     console.log('[SyncManager] Processing VIDEO_UPLOAD item:', item.id);
     const payload = JSON.parse(item.payload);
@@ -141,9 +141,15 @@ const syncVideos = async (item: SyncItem) => {
             image: file,
             clientVideoId: clientVideoId
         });
+        console.log("pyload of video", {
+            image: file,
+            clientVideoId: clientVideoId
+        })
+
+        console.log("response of video", response)
 
         console.log('[SyncManager] Upload success:', response.status);
-
+        Alert.alert("Video uploaded successfully");
         // Success
         await VideosRepo.updateStatus(clientVideoId, 'UPLOADED');
         if (item.id) await SyncQueueRepo.remove(item.id);
@@ -152,23 +158,33 @@ const syncVideos = async (item: SyncItem) => {
         console.error(`Video upload failed for ${clientVideoId}`, error);
         await VideosRepo.incrementRetry(clientVideoId);
         await VideosRepo.updateStatus(clientVideoId, 'FAILED', error.message || "Upload Failed");
-        // We throw so the main loop catches it, but we already handled the retry logic in DB.
-        // Actually, we should NOT throw if we want to continue processing others?
-        // But the main loop catches specific item errors and continues. 
-        // So throwing is fine for logging, but we manually handled the queue state above.
     }
 };
 
 export const SyncManager = {
     pullUpdates: async () => {
         try {
-            // Fetch Jobs
+            // Fetch Jobs List
             const response = await JobsApi.getAll();
             if (response.data) {
                 const data = Array.isArray(response.data) ? response.data : (response.data as any).data || [];
 
                 if (Array.isArray(data)) {
+                    // Sync the list first (basic info)
                     await JobsRepo.syncFromServer(data);
+
+                    // Fetch and Sync Details for each job
+                    for (const job of data) {
+                        try {
+                            const detailResponse = await JobsApi.getJobById(job._id);
+
+                            if (detailResponse.data && detailResponse.data.success && detailResponse.data.data) {
+                                await JobsRepo.syncJobDetails(detailResponse.data.data);
+                            }
+                        } catch (err) {
+                            console.error(`Failed to fetch details for job ${job._id}`, err);
+                        }
+                    }
                 }
             }
         } catch (e) {

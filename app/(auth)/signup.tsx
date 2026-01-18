@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import AppInput from '../../src/components/common/AppInput';
 import { useAuthStore } from '../../src/store/auth.store';
@@ -31,49 +31,56 @@ export default function SignupScreen() {
     };
 
     return (
-        <View className="flex-1 justify-center p-6 bg-background">
-            <TouchableOpacity onPress={() => router.back()}
-                className='absolute top-12 left-8 bg-white rounded-full p-2'
-            >
-                <Ionicons name='arrow-back' size={24} color='black' />
-            </TouchableOpacity>
-            <Image source={require('../../assets/images/logo.png')} className="w-32 h-32 mx-auto mb-8" />
-            <Text className="text-3xl font-bold mb-8 text-center text-primary">Create Account</Text>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            className="flex-1"
+        >
+            <View className="flex-1 justify-center p-6 bg-background">
+                <TouchableOpacity onPress={() => router.back()}
+                    className='absolute top-12 left-8 bg-white rounded-full p-2 z-10'
+                >
+                    <Ionicons name='arrow-back' size={24} color='black' />
+                </TouchableOpacity>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                    <Image source={require('../../assets/images/logo.png')} className="w-32 h-32 mx-auto mb-8" />
+                    <Text className="text-3xl font-bold mb-8 text-center text-primary">Create Account</Text>
 
-            <AppInput
-                label="Full Name"
-                placeholder="John Doe"
-                value={name}
-                onChangeText={setName}
-            />
+                    <AppInput
+                        label="Full Name"
+                        placeholder="John Doe"
+                        value={name}
+                        onChangeText={setName}
+                    />
 
-            <AppInput
-                label="Email"
-                placeholder="user@example.com"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-            />
+                    <AppInput
+                        label="Email"
+                        placeholder="user@example.com"
+                        value={email}
+                        onChangeText={setEmail}
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                    />
 
-            <AppInput
-                label="Password"
-                placeholder="••••••"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
+                    <AppInput
+                        label="Password"
+                        placeholder="••••••"
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
 
-            <View className="mt-4">
-                {error && <Text className="text-red-500 text-center mb-2">{error}</Text>}
-                <AppButton title="Sign Up" onPress={handleSignup} loading={isLoading} />
+                    <View className="mt-4">
+                        {error && <Text className="text-red-500 text-center mb-2">{error}</Text>}
+                        <AppButton title="Sign Up" onPress={handleSignup} loading={isLoading} />
+                    </View>
+
+                    <Link href="/(auth)/login" asChild>
+                        <Text className="text-center mt-6 text-textMuted">
+                            Already have an account? <Text className="text-primary font-bold">Login</Text>
+                        </Text>
+                    </Link>
+                </ScrollView>
             </View>
-
-            <Link href="/(auth)/login" asChild>
-                <Text className="text-center mt-6 text-textMuted">
-                    Already have an account? <Text className="text-primary font-bold">Login</Text>
-                </Text>
-            </Link>
-        </View>
+        </KeyboardAvoidingView>
     );
 }

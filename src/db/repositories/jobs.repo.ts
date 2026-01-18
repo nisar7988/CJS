@@ -2,6 +2,8 @@ import { getDB } from '../index';
 import { Job } from '../../types/models';
 import { generateUUID } from '../../utils/uuid';
 import { SyncQueueRepo } from './syncQueue.repo';
+import { NotesRepo } from './notes.repo';
+import { VideosRepo } from './videos.repo';
 
 export const JobsRepo = {
     getAll: async (): Promise<Job[]> => {
@@ -113,6 +115,21 @@ export const JobsRepo = {
                     [localId, job._id, job.title, job.location, job.budget, job.description, new Date(job.createdAt).getTime(), new Date(job.updatedAt).getTime(), job.userId]
                 );
             }
+        }
+    },
+
+    syncJobDetails: async (jobData: any) => {
+        // jobData contains the full job details including notes and siteVideo
+        const localId = jobData.clientJobId || jobData._id;
+
+        // Sync Notes
+        if (jobData.notes && Array.isArray(jobData.notes)) {
+            await NotesRepo.syncFromServer(jobData.notes, localId);
+        }
+
+        // Sync Video
+        if (jobData.siteVideo) {
+            await VideosRepo.syncFromServer(jobData.siteVideo, localId);
         }
     }
 };

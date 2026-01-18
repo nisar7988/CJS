@@ -6,7 +6,9 @@ import {
     TouchableOpacity,
     TextInput,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
@@ -90,156 +92,161 @@ export default function EditJobScreen() {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#F6F9FF" }}>
-            <ScrollView
-                contentContainerStyle={{ paddingBottom: 110 }}
-                showsVerticalScrollIndicator={false}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
             >
-                {/* Header */}
-                <View style={{ paddingHorizontal: 18, paddingTop: 10 }}>
-                    {/* Back Button */}
+                <ScrollView
+                    contentContainerStyle={{ paddingBottom: 110 }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    {/* Header */}
+                    <View style={{ paddingHorizontal: 18, paddingTop: 10 }}>
+                        {/* Back Button */}
+                        <TouchableOpacity
+                            onPress={() => router.back()}
+                            style={{
+                                width: 38,
+                                height: 38,
+                                borderRadius: 20,
+                                backgroundColor: "#FFFFFF",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                shadowColor: "#000",
+                                shadowOpacity: 0.05,
+                                shadowRadius: 10,
+                                elevation: 2,
+                            }}
+                        >
+                            <Ionicons name="arrow-back" size={20} color="#111" />
+                        </TouchableOpacity>
+
+                        {/* Title */}
+                        <View style={{ marginTop: 14 }}>
+                            <Text style={{ fontSize: 22, fontWeight: "800", color: "#111827" }}>
+                                Edit Job
+                            </Text>
+                            <Text style={{ fontSize: 12, color: "#6B7280", marginTop: 4 }}>
+                                Update the details below
+                            </Text>
+                        </View>
+                    </View>
+
+                    {/* Cards */}
+                    <View style={{ paddingHorizontal: 18, marginTop: 18, gap: 14 }}>
+                        {/* Job Details */}
+                        <Card
+                            title="Job Details"
+                            icon={<Ionicons name="briefcase-outline" size={18} color="#2563EB" />}
+                        >
+                            <FieldLabel label="Job Title" required />
+                            <Input
+                                placeholder="e.g., Kitchen Renovation"
+                                value={jobTitle}
+                                onChangeText={setJobTitle}
+                            />
+
+                            <FieldLabel label="Description" />
+                            <Input
+                                placeholder="Add job description..."
+                                value={description}
+                                onChangeText={setDescription}
+                                multiline
+                                height={90}
+                                alignTop
+                            />
+                        </Card>
+
+                        {/* Client Info */}
+                        <Card
+                            title="Client Info"
+                            icon={<Ionicons name="person-outline" size={18} color="#16A34A" />}
+                        >
+                            <FieldLabel label="Client Name" required />
+                            <Input
+                                placeholder="e.g., John Smith"
+                                value={clientName}
+                                onChangeText={setClientName}
+                            />
+
+                            <FieldLabel label="City (Optional)" />
+                            <Input
+                                leftIcon={<Ionicons name="location-outline" size={18} color="#6B7280" />}
+                                placeholder="e.g., San Francisco"
+                                value={city}
+                                onChangeText={setCity}
+                            />
+                        </Card>
+
+                        {/* Budget & Timeline */}
+                        <Card
+                            title="Budget & Timeline"
+                            icon={<Ionicons name="cash-outline" size={18} color="#F59E0B" />}
+                        >
+                            <FieldLabel label="Budget (USD)" />
+                            <Input
+                                leftIcon={<Text style={{ color: "#6B7280", fontSize: 16 }}>$</Text>}
+                                placeholder="0"
+                                keyboardType="numeric"
+                                value={budget}
+                                onChangeText={setBudget}
+                            />
+
+                            <FieldLabel label="Start Date (Optional)" />
+                            <Input
+                                leftIcon={<Ionicons name="calendar-outline" size={18} color="#6B7280" />}
+                                placeholder="Select date"
+                                value={startDate}
+                                onChangeText={setStartDate}
+                            />
+
+                            <FieldLabel label="Status" />
+                            <Input
+                                placeholder="e.g., Active"
+                                value={status}
+                                onChangeText={setStatus}
+                            />
+                        </Card>
+                    </View>
+                </ScrollView>
+
+                {/* Bottom Button */}
+                <View
+                    style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        padding: 16,
+                        backgroundColor: "#F6F9FF",
+                    }}
+                >
                     <TouchableOpacity
-                        onPress={() => router.back()}
+                        activeOpacity={0.9}
+                        disabled={isSubmitting}
                         style={{
-                            width: 38,
-                            height: 38,
-                            borderRadius: 20,
-                            backgroundColor: "#FFFFFF",
+                            height: 54,
+                            borderRadius: 14,
+                            backgroundColor: isSubmitting ? "#93C5FD" : "#2563EB",
                             alignItems: "center",
                             justifyContent: "center",
-                            shadowColor: "#000",
-                            shadowOpacity: 0.05,
-                            shadowRadius: 10,
-                            elevation: 2,
+                            shadowColor: "#2563EB",
+                            shadowOpacity: 0.25,
+                            shadowRadius: 12,
+                            elevation: 4,
                         }}
+                        onPress={handleUpdateJob}
                     >
-                        <Ionicons name="arrow-back" size={20} color="#111" />
+                        {isSubmitting ? (
+                            <ActivityIndicator color="#fff" />
+                        ) : (
+                            <Text style={{ color: "#fff", fontSize: 15, fontWeight: "700" }}>
+                                Update Job
+                            </Text>
+                        )}
                     </TouchableOpacity>
-
-                    {/* Title */}
-                    <View style={{ marginTop: 14 }}>
-                        <Text style={{ fontSize: 22, fontWeight: "800", color: "#111827" }}>
-                            Edit Job
-                        </Text>
-                        <Text style={{ fontSize: 12, color: "#6B7280", marginTop: 4 }}>
-                            Update the details below
-                        </Text>
-                    </View>
                 </View>
-
-                {/* Cards */}
-                <View style={{ paddingHorizontal: 18, marginTop: 18, gap: 14 }}>
-                    {/* Job Details */}
-                    <Card
-                        title="Job Details"
-                        icon={<Ionicons name="briefcase-outline" size={18} color="#2563EB" />}
-                    >
-                        <FieldLabel label="Job Title" required />
-                        <Input
-                            placeholder="e.g., Kitchen Renovation"
-                            value={jobTitle}
-                            onChangeText={setJobTitle}
-                        />
-
-                        <FieldLabel label="Description" />
-                        <Input
-                            placeholder="Add job description..."
-                            value={description}
-                            onChangeText={setDescription}
-                            multiline
-                            height={90}
-                            alignTop
-                        />
-                    </Card>
-
-                    {/* Client Info */}
-                    <Card
-                        title="Client Info"
-                        icon={<Ionicons name="person-outline" size={18} color="#16A34A" />}
-                    >
-                        <FieldLabel label="Client Name" required />
-                        <Input
-                            placeholder="e.g., John Smith"
-                            value={clientName}
-                            onChangeText={setClientName}
-                        />
-
-                        <FieldLabel label="City (Optional)" />
-                        <Input
-                            leftIcon={<Ionicons name="location-outline" size={18} color="#6B7280" />}
-                            placeholder="e.g., San Francisco"
-                            value={city}
-                            onChangeText={setCity}
-                        />
-                    </Card>
-
-                    {/* Budget & Timeline */}
-                    <Card
-                        title="Budget & Timeline"
-                        icon={<Ionicons name="cash-outline" size={18} color="#F59E0B" />}
-                    >
-                        <FieldLabel label="Budget (USD)" />
-                        <Input
-                            leftIcon={<Text style={{ color: "#6B7280", fontSize: 16 }}>$</Text>}
-                            placeholder="0"
-                            keyboardType="numeric"
-                            value={budget}
-                            onChangeText={setBudget}
-                        />
-
-                        <FieldLabel label="Start Date (Optional)" />
-                        <Input
-                            leftIcon={<Ionicons name="calendar-outline" size={18} color="#6B7280" />}
-                            placeholder="Select date"
-                            value={startDate}
-                            onChangeText={setStartDate}
-                        />
-
-                        <FieldLabel label="Status" />
-                        <Input
-                            placeholder="e.g., Active"
-                            value={status}
-                            onChangeText={setStatus}
-                        />
-                    </Card>
-                </View>
-            </ScrollView>
-
-            {/* Bottom Button */}
-            <View
-                style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    padding: 16,
-                    backgroundColor: "#F6F9FF",
-                }}
-            >
-                <TouchableOpacity
-                    activeOpacity={0.9}
-                    disabled={isSubmitting}
-                    style={{
-                        height: 54,
-                        borderRadius: 14,
-                        backgroundColor: isSubmitting ? "#93C5FD" : "#2563EB",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        shadowColor: "#2563EB",
-                        shadowOpacity: 0.25,
-                        shadowRadius: 12,
-                        elevation: 4,
-                    }}
-                    onPress={handleUpdateJob}
-                >
-                    {isSubmitting ? (
-                        <ActivityIndicator color="#fff" />
-                    ) : (
-                        <Text style={{ color: "#fff", fontSize: 15, fontWeight: "700" }}>
-                            Update Job
-                        </Text>
-                    )}
-                </TouchableOpacity>
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }

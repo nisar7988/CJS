@@ -4,7 +4,9 @@ import {
     Text,
     ScrollView,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter, useFocusEffect } from "expo-router";
@@ -73,68 +75,73 @@ export default function JobDetailsScreen() {
 
     return (
         <SafeAreaView className="flex-1 bg-background" style={{ backgroundColor: "#F6F9FF" }}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 30 }}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
             >
-                {/* Header */}
-                <View className="px-[18px] pt-2.5">
-                    <View className="flex-row items-center justify-between">
-                        {/* Back */}
-                        <TouchableOpacity
-                            onPress={() => router.back()}
-                            className="w-[38px] h-[38px] rounded-[20px] bg-white items-center justify-center shadow-black/5 shadow-sm elevation-2"
-                        >
-                            <Ionicons name="arrow-back" size={20} color="#111" />
-                        </TouchableOpacity>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 30 }}
+                >
+                    {/* Header */}
+                    <View className="px-[18px] pt-2.5">
+                        <View className="flex-row items-center justify-between">
+                            {/* Back */}
+                            <TouchableOpacity
+                                onPress={() => router.back()}
+                                className="w-[38px] h-[38px] rounded-[20px] bg-white items-center justify-center shadow-black/5 shadow-sm elevation-2"
+                            >
+                                <Ionicons name="arrow-back" size={20} color="#111" />
+                            </TouchableOpacity>
 
-                        {/* Edit Button */}
-                        <TouchableOpacity
-                            onPress={() => router.push(`/jobs/edit/${job.id}`)}
-                            className="bg-primary px-3.5 py-1.5 rounded-2xl"
-                        >
-                            <Text className="text-white font-bold text-[13px]">
-                                Edit
+                            {/* Edit Button */}
+                            <TouchableOpacity
+                                onPress={() => router.push(`/jobs/edit/${job.id}`)}
+                                className="bg-primary px-3.5 py-1.5 rounded-2xl"
+                            >
+                                <Text className="text-white font-bold text-[13px]">
+                                    Edit
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Title + subtitle */}
+                        <View className="mt-2.5">
+                            <Text className="text-lg font-extrabold text-gray-900">
+                                {job.title}
                             </Text>
-                        </TouchableOpacity>
+                            <Text className="text-xs text-gray-500 mt-0.5">
+                                {job.location}
+                            </Text>
+                        </View>
+
+                        {/* Tabs */}
+                        <View className="flex-row gap-2.5 mt-3">
+                            <TabButton
+                                label="Overview"
+                                icon="document-text-outline"
+                                activeTab={activeTab}
+                                onPress={() => setActiveTab("Overview")}
+                            />
+                            <TabButton
+                                label="Notes"
+                                icon="reader-outline"
+                                activeTab={activeTab}
+                                onPress={() => setActiveTab("Notes")}
+                            />
+                            <TabButton
+                                label="Video"
+                                icon="videocam-outline"
+                                activeTab={activeTab}
+                                onPress={() => setActiveTab("Video")}
+                            />
+                        </View>
                     </View>
 
-                    {/* Title + subtitle */}
-                    <View className="mt-2.5">
-                        <Text className="text-lg font-extrabold text-gray-900">
-                            {job.title}
-                        </Text>
-                        <Text className="text-xs text-gray-500 mt-0.5">
-                            {job.location}
-                        </Text>
-                    </View>
-
-                    {/* Tabs */}
-                    <View className="flex-row gap-2.5 mt-3">
-                        <TabButton
-                            label="Overview"
-                            icon="document-text-outline"
-                            activeTab={activeTab}
-                            onPress={() => setActiveTab("Overview")}
-                        />
-                        <TabButton
-                            label="Notes"
-                            icon="reader-outline"
-                            activeTab={activeTab}
-                            onPress={() => setActiveTab("Notes")}
-                        />
-                        <TabButton
-                            label="Video"
-                            icon="videocam-outline"
-                            activeTab={activeTab}
-                            onPress={() => setActiveTab("Video")}
-                        />
-                    </View>
-                </View>
-
-                {/* Content */}
-                {renderContent()}
-            </ScrollView>
+                    {/* Content */}
+                    {renderContent()}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }

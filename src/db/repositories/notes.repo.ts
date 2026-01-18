@@ -65,5 +65,33 @@ export const NotesRepo = {
     markSynced: async (id: string) => {
         const db = await getDB();
         await db.runAsync('UPDATE notes SET synced = 1 WHERE id = ?', [id]);
+    },
+
+    syncFromServer: async (notes: any[], jobId: string) => {
+        const db = await getDB();
+
+        for (const note of notes) {
+            const localId = note.clientNoteId || note._id;
+            const existing = await db.getFirstAsync<Note>('SELECT * FROM notes WHERE id = ?', [localId]);
+            if (existing) {
+                if (existing.synced === 1) {
+                    await db.runAsync(
+                        `UPDATE notes SET 
+                        content = ?, 
+                        updated_at = ?, 
+                        synced = 1 
+                        WHERE id = ?`,
+                        [note.text, new Date(note.updatedAt).getTime(), localId]
+                    );
+                }
+            } else {
+                await db.runAsync(
+                    `INSERT INTO notes (id, job_id, content, created_at, updated_at, synced)
+                     VALUES (?, ?, ?, ?, ?, 1)`,
+                    [localId, jobId, note.text, new Date(note.createdAt).getTime(), new Date(note.updatedAt).getTime()]
+                );
+            }
+        }
     }
 };
+
