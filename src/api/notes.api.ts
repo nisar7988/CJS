@@ -1,5 +1,5 @@
 import api from './axios';
-import { Note } from '../types/models';
+import { Note, CreateJobNotesPayload } from '../types/models';
 import { API } from './api';
 
 export const NotesApi = {
@@ -7,13 +7,12 @@ export const NotesApi = {
         return api.get<Note[]>(API.JOBS.ADD_NOTE(jobId));
     },
 
-    create: async (note: Partial<Note>) => {
-        if (!note.job_id) throw new Error('Job ID is required');
-        return api.post<Note>(API.JOBS.ADD_NOTE(note.job_id), note);
+    create: async (jobId: string, note: CreateJobNotesPayload) => {
+        return api.post<Note>(API.JOBS.ADD_NOTE(jobId), note);
     },
 
     update: async (jobId: string, id: string, content: string) => {
-        return api.put<Note>(API.JOBS.UPDATE_NOTE(jobId, id), { content });
+        return api.put<Note>(API.JOBS.UPDATE_NOTE(jobId, id), { text: content });
     },
 
     delete: async (jobId: string, id: string) => {

@@ -35,10 +35,9 @@ export default function CreateJobScreen() {
         try {
             await JobsRepo.create({
                 title: jobTitle,
-                company: clientName,
-                status: status || "Pending",
-                salary: budget,
-                description: description + (city ? `\nLocation: ${city}` : "") + (startDate ? `\nStart Date: ${startDate}` : ""),
+                location: clientName + (city ? `, ${city}` : ""), // Combine Client Name + City for location
+                budget: parseFloat(budget) || 0,
+                description: description + (startDate ? `\nStart Date: ${startDate}` : "") + (status ? `\nStatus: ${status}` : ""),
             });
             router.back();
         } catch (error) {

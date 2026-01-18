@@ -2,44 +2,14 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Job } from "../../types/models";
+import { SyncBadge } from "../status/SyncBadge";
 
 interface JobCardProps {
     job: Job;
     onPress?: () => void;
 }
 
-const statusStyle = (status: string) => {
-    switch (status.toLowerCase()) {
-        case "active":
-        case "interviewing":
-            return {
-                badge: "bg-green-100",
-                text: "text-green-700",
-                dot: "bg-green-500",
-            };
-        case "pending":
-            return {
-                badge: "bg-yellow-100",
-                text: "text-yellow-700",
-                dot: "bg-yellow-500",
-            };
-        case "rejected":
-            return {
-                badge: "bg-red-100",
-                text: "text-red-700",
-                dot: "bg-red-500",
-            };
-        default:
-            return {
-                badge: "bg-blue-100",
-                text: "text-blue-700",
-                dot: "bg-blue-500",
-            };
-    }
-};
-
 export default function JobCard({ job, onPress }: JobCardProps) {
-    const s = statusStyle(job.status);
     const date = new Date(job.created_at).toLocaleDateString();
 
     return (
@@ -61,26 +31,21 @@ export default function JobCard({ job, onPress }: JobCardProps) {
                     <Text className="text-base font-semibold text-gray-900" numberOfLines={1}>
                         {job.title}
                     </Text>
-                    <Text className="text-gray-500 mt-1" numberOfLines={1}>{job.company}</Text>
+                    <Text className="text-gray-500 mt-1" numberOfLines={1}>{job.location}</Text>
                 </View>
 
-                <View className={`px-3 py-1 rounded-full ${s.badge}`}>
-                    <View className="flex-row items-center gap-2">
-                        <View className={`w-2 h-2 rounded-full ${s.dot}`} />
-                        <Text className={`text-xs font-medium ${s.text} uppercase`}>{job.status}</Text>
-                    </View>
-                </View>
+                <SyncBadge synced={job.synced} />
             </View>
 
             {/* Details Row */}
             <View className="flex-row items-center justify-between mt-5">
                 {/* Amount */}
-                {job.salary ? (
+                {job.budget ? (
                     <View className="flex-row items-center gap-2">
                         <View className="w-8 h-8 rounded-full bg-blue-50 items-center justify-center">
                             <Text className="text-blue-500 font-bold text-xs">$</Text>
                         </View>
-                        <Text className="text-gray-900 font-semibold">{job.salary}</Text>
+                        <Text className="text-gray-900 font-semibold">{job.budget}</Text>
                     </View>
                 ) : (
                     <View />

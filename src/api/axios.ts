@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { storage } from '../utils/storage';
-import { BASE_URL } from './api';
+import { BASE_URL, API } from './api';
 
 const api = axios.create({
     baseURL: BASE_URL,
@@ -14,7 +14,7 @@ api.interceptors.request.use(
     async (config) => {
         const token = await storage.getItem('auth_token');
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `${token}`;
         }
         return config;
     },
@@ -26,7 +26,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        if (error.response?.status === 401) {
+        console.log("error in api", error)
+        if (error.response?.status === 401 && error.config?.url !== API.AUTH.LOGOUT) {
             await storage.removeItem('auth_token');
             const { useAuthStore } = require('../store/auth.store');
             useAuthStore.getState().logout();

@@ -15,15 +15,15 @@ export const JobsRepo = {
         return result || null;
     },
 
-    create: async (job: Omit<Job, 'id' | 'created_at' | 'updated_at' | 'synced'>) => {
+    create: async (job: Omit<Job, 'id' | 'server_id' | 'created_at' | 'updated_at' | 'synced'>) => {
         const db = await getDB();
         const id = generateUUID();
         const now = Date.now();
 
         await db.runAsync(
-            `INSERT INTO jobs (id, title, company, status, salary, description, created_at, updated_at, synced)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)`,
-            [id, job.title, job.company, job.status, job.salary || '', job.description || '', now, now]
+            `INSERT INTO jobs (id, title, location, budget, description, created_at, updated_at, synced)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 0)`,
+            [id, job.title, job.location, job.budget, job.description || '', now, now]
         );
 
         // Add to sync queue
@@ -61,5 +61,58 @@ export const JobsRepo = {
     markSynced: async (id: string) => {
         const db = await getDB();
         await db.runAsync('UPDATE jobs SET synced = 1 WHERE id = ?', [id]);
+    },
+
+    setServerId: async (localId: string, serverId: string) => {
+        const db = await getDB();
+        await db.runAsync('UPDATE jobs SET server_id = ?, synced = 1 WHERE id = ?', [serverId, localId]);
+    },
+
+    syncFromServer: async (apiJobs: any[]) => {
+        const db = await getDB();
+
+        if (!Array.isArray(apiJobs)) return;
+
+        for (const job of apiJobs) {
+            // job.clientJobId is the local ID we generated
+            // job._id is the server ID
+
+            const localId = job.clientJobId || job._id;
+
+            // Check if we have this job locally
+            const existing = await db.getFirstAsync<Job>('SELECT * FROM jobs WHERE id = ?', [localId]);
+
+            if (existing) {
+                // Determine if we should overwrite
+                // If local is NOT synced (synced=0), we have pending changes. Priority: Local (Keep pending).
+                if (existing.synced === 1) {
+                    await db.runAsync(
+                        `UPDATE jobs SET 
+                        server_id = ?, 
+                        title = ?, 
+                        location = ?, 
+                        budget = ?, 
+                        description = ?, 
+                        updated_at = ?, 
+                        synced = 1 
+                        WHERE id = ?`,
+                        [job._id, job.title, job.location, job.budget, job.description, new Date(job.updatedAt).getTime(), localId]
+                    );
+                } else {
+                    // We have pending changes. 
+                    // We SHOULD update the server_id mapping though
+                    if (!existing.server_id && job._id) {
+                        await db.runAsync('UPDATE jobs SET server_id = ? WHERE id = ?', [job._id, localId]);
+                    }
+                }
+            } else {
+                // New job from server, insert it
+                await db.runAsync(
+                    `INSERT INTO jobs (id, server_id, title, location, budget, description, created_at, updated_at, synced, user_id)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`,
+                    [localId, job._id, job.title, job.location, job.budget, job.description, new Date(job.createdAt).getTime(), new Date(job.updatedAt).getTime(), job.userId]
+                );
+            }
+        }
     }
 };

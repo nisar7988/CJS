@@ -105,7 +105,7 @@ export default function JobDetailsScreen() {
                             {job.title}
                         </Text>
                         <Text className="text-xs text-gray-500 mt-0.5">
-                            {job.company}
+                            {job.location}
                         </Text>
                     </View>
 
