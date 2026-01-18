@@ -9,16 +9,15 @@ export default function WelcomeScreen() {
     return (
         <LinearGradient
             colors={[
-                "#0F172A",  // top dark navy
-                "#1E293B",  // middle lighter navy
-                "#0F172A",  // bottom dark navy
+                "#0F172A",
+                "#1E293B",
+                "#0F172A",
             ]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
             className="flex-1 items-center justify-center"
             pointerEvents="box-none"
         >
-            {/* Optional: soft glow like screenshot */}
             <LinearGradient
                 colors={["rgba(34,197,94,0.20)", "transparent"]}
                 start={{ x: 0, y: 1 }}
@@ -30,7 +29,6 @@ export default function WelcomeScreen() {
             <Image source={require('../../assets/images/logo.png')} className="w-52 h-52 ml-10" />
 
             <Text className="text-3xl font-bold text-primary mb-6 text-white">CJM</Text>
-            {/*USE APP BUTTON*/}
             <View className='w-[80%]'>
                 <AppButton
                     title="Create Account"

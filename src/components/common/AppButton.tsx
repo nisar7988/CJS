@@ -3,25 +3,15 @@ import { Pressable, Text, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 interface AppButtonProps {
-    /** Text shown on the button (defaults to "Button") */
     title?: string;
-    /** Callback when the button is pressed */
     onPress: () => void;
-    /** Disable the button (defaults to false) */
     disabled?: boolean;
-    /** Show a loading spinner instead of the title (defaults to false) */
     loading?: boolean;
-    /** Additional Tailwind‑style classes for the outer Pressable */
     className?: string;
-    /** Additional Tailwind‑style classes for the inner Text */
     textClassName?: string;
-    /** Gradient colors – defaults to a blue gradient */
     colors?: string[];
 }
 
-/**
- * A reusable button component with a linear‑gradient background.
- */
 export default function AppButton({
     title = "Button",
     onPress,

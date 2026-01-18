@@ -27,10 +27,7 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         if (error.response?.status === 401) {
-            // 401 Unauthorized -> Clear token and logout
             await storage.removeItem('auth_token');
-            // We can't directly use hooks here, but we can rely on the store or simple navigation if possible.
-            // Better to update the store state which will trigger the AuthGuard.
             const { useAuthStore } = require('../store/auth.store');
             useAuthStore.getState().logout();
         }

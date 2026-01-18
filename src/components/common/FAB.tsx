@@ -7,7 +7,6 @@ import { theme } from '../../../constants/theme';
 interface FABProps {
     onPress?: () => void;
     icon?: keyof typeof Ionicons.glyphMap;
-    // Optional route to navigate to. If provided, onPress is ignored or handled alongside navigation.
     href?: string;
 }
 

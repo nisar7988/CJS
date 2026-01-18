@@ -1,8 +1,4 @@
-// src/types/api.ts
 
-// ----------------------
-// AUTH
-// ----------------------
 
 export type RegisterRequest = {
     name: string;
@@ -30,12 +26,9 @@ export type MyProfileResponse = {
     email: string;
 };
 
-// ----------------------
-// JOBS
-// ----------------------
 
 export type CreateJobRequest = {
-    clientJobId: string; // generated locally (uuid)
+    clientJobId: string;
     title: string;
     location: string;
     description: string;
@@ -45,7 +38,7 @@ export type CreateJobRequest = {
 export type UpdateJobRequest = CreateJobRequest;
 
 export type JobResponse = {
-    id: string; // server job id
+    id: string;
     clientJobId: string;
     title: string;
     location: string;
@@ -66,12 +59,9 @@ export type JobDetailsResponse = JobResponse & {
     };
 };
 
-// ----------------------
-// NOTES
-// ----------------------
 
 export type CreateNoteRequest = {
-    clientNoteId: string; // generated locally (uuid)
+    clientNoteId: string;
     text: string;
 };
 
@@ -80,16 +70,13 @@ export type UpdateNoteRequest = {
 };
 
 export type NoteResponse = {
-    id: string; // server note id
+    id: string;
     clientNoteId: string;
     text: string;
     createdAt?: string;
     updatedAt?: string;
 };
 
-// ----------------------
-// VIDEO UPLOAD (multipart)
-// ----------------------
 
 export type UploadVideoFormData = {
     videoFile: any; // Expo File object OR RN file object
