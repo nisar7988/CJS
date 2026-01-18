@@ -10,7 +10,7 @@ export const useAuthGuard = () => {
     // Load session on mount
     useEffect(() => {
         loadSession();
-    }, []);
+    }, [loadSession]);
 
     useEffect(() => {
         const inAuthGroup = segments[0] === '(auth)';
@@ -22,5 +22,5 @@ export const useAuthGuard = () => {
             // Redirect away from the sign-in page.
             router.replace('/(main)/jobs');
         }
-    }, [isAuthenticated, segments]);
+    }, [isAuthenticated, segments, router]);
 };

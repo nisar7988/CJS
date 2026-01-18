@@ -10,7 +10,7 @@ export default function MainLayout() {
     const handleLogout = async () => {
         try {
             await AuthApi.logout();
-        } catch (e) { /* ignore */ }
+        } catch { /* ignore */ }
         await logout();
     };
 

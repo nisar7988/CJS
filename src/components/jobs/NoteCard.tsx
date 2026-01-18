@@ -8,7 +8,7 @@ interface NoteCardProps {
 }
 
 export default function NoteCard({ note }: NoteCardProps) {
-    const formattedDate = new Date(note.created_at).toLocaleString();
+    // const formattedDate = new Date(note.created_at).toLocaleString();
 
     // Calculate relative time (simple version)
     const getRelativeTime = (timestamp: number) => {

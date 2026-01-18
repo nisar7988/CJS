@@ -20,7 +20,7 @@ export default function EditJobScreen() {
     const router = useRouter();
     const { jobId } = useLocalSearchParams();
 
-    const [job, setJob] = useState<Job | null>(null);
+    // const [job, setJob] = useState<Job | null>(null); // Unused
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,11 +39,11 @@ export default function EditJobScreen() {
                 try {
                     const data = await JobsRepo.getById(jobId as string);
                     if (data) {
-                        setJob(data);
+                        // setJob(data);
                         setJobTitle(data.title);
-                        setClientName(data.company);
-                        setBudget(data.salary || "");
-                        setStatus(data.status);
+                        // setClientName(data.company); // Not in DB
+                        setBudget(data.budget?.toString() || "");
+                        // setStatus(data.status); // Not in DB
                         // Parse description for other fields if possible, or just put remaining in description
                         // For now, we put everything else in description as plain text logic is simple
                         setDescription(data.description || "");
@@ -67,11 +67,13 @@ export default function EditJobScreen() {
         setIsSubmitting(true);
         try {
             await JobsRepo.update(jobId as string, {
+                // clientJobId: jobId as string, // Not needed for update
                 title: jobTitle,
-                company: clientName,
-                status: status,
-                salary: budget,
-                description: description
+                // company: clientName, // Not supported
+                // status: status, // Not supported
+                budget: Number(budget) || 0,
+                description: description,
+                location: city || "Unknown" // Location is required in payload
             });
             router.back();
         } catch (error) {

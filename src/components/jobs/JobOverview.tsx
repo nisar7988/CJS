@@ -14,14 +14,12 @@ export default function JobOverview({ job }: JobOverviewProps) {
             <View className="rounded-[18px] p-[18px] bg-primary shadow-primary/25 shadow-md elevation-5">
                 <View className="flex-row items-center gap-2">
                     <View
-                        className={`w-2.5 h-2.5 rounded-[10px] ${job.status === 'Active' ? "bg-[#22C55E]" : "bg-[#fbbf24]"
-                            }`}
+                        className="w-2.5 h-2.5 rounded-[10px] bg-[#22C55E]"
                     />
                     <Text
-                        className={`text-xs font-bold ${job.status === 'Active' ? "text-[#22C55E]" : "text-[#fbbf24]"
-                            }`}
+                        className="text-xs font-bold text-[#22C55E]"
                     >
-                        {job.status}
+                        Active
                     </Text>
                 </View>
 
@@ -34,7 +32,7 @@ export default function JobOverview({ job }: JobOverviewProps) {
                         $
                     </Text>
                     <Text className="text-white text-[22px] font-black">
-                        {job.salary || "N/A"}
+                        {job.budget?.toLocaleString() || "N/A"}
                     </Text>
                 </View>
             </View>
@@ -46,7 +44,7 @@ export default function JobOverview({ job }: JobOverviewProps) {
                     iconBg="bg-[#E9FFF2]"
                     iconColor="#16A34A"
                     label="Location"
-                    value="Remote" // Location removed from model, using placeholder
+                    value={job.location || "Remote"}
                 />
                 <MiniInfoCard
                     icon="time-outline"
@@ -65,7 +63,7 @@ export default function JobOverview({ job }: JobOverviewProps) {
             >
                 <View className="bg-[#F3F6FB] p-[14px] rounded-[14px]">
                     <Text className="text-[13px] font-semibold text-gray-900">
-                        {job.company}
+                        Client Name
                     </Text>
                 </View>
             </SectionCard>

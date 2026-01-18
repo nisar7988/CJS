@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Stack, Slot, useRouter, useSegments } from 'expo-router';
+import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { initDatabase } from '../src/db/init';
@@ -8,7 +8,7 @@ import { useSyncOnNetwork, useSyncOnForeground } from '../src/hooks/useSyncOnNet
 import { OfflineBanner } from '../src/components/status/OfflineBanner';
 import { Loader } from '../src/components/common/Loader';
 import '../global.css';
-import { JobsApi } from '@/api/jobs.api';
+// import { JobsApi } from '@/api/jobs.api';
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
@@ -30,7 +30,7 @@ export default function RootLayout() {
     }
 
     prepare();
-  }, []);
+  }, [loadSession]);
 
   // Global Sync Hooks
   useSyncOnNetwork(isReady);
@@ -47,7 +47,7 @@ export default function RootLayout() {
     } else if (isAuthenticated && inAuthGroup) {
       router.replace('/(tabs)');
     }
-  }, [isReady, isAuthenticated, segments]);
+  }, [isReady, isAuthenticated, segments, router]);
 
 
   if (!isReady) {

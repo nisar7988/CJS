@@ -89,33 +89,26 @@ export const useAuthStore = create<AuthState>((set) => ({
 
             if (token && savedUserStr) {
                 const savedUser = JSON.parse(savedUserStr);
-                // Optimistically set the user
                 set({ isAuthenticated: true, token, user: savedUser });
 
-                // Then verify/update in background
                 try {
                     const user = await AuthApi.myProfile();
-                    // Update store and storage with latest data
                     await storage.setItem('auth_user', JSON.stringify(user));
                     set({ user });
                 } catch (e: any) {
                     console.error('Failed to refresh profile', e);
-                    // Only logout if it's strictly an auth error (401)
                     if (e.response?.status === 401) {
                         await storage.removeItem('auth_token');
                         await storage.removeItem('auth_user');
                         set({ isAuthenticated: false, token: null, user: null });
                     }
-                    // For other errors (network, 500), we stay logged in with cached data
                 }
             } else if (token) {
-                // Token exists but no user data (migration case or cleared storage)
                 try {
                     const user = await AuthApi.myProfile();
                     await storage.setItem('auth_user', JSON.stringify(user));
                     set({ isAuthenticated: true, token, user });
-                } catch (e) {
-                    // If we can't fetch user with just token, we must logout
+                } catch {
                     await storage.removeItem('auth_token');
                     set({ isAuthenticated: false, token: null, user: null });
                 }

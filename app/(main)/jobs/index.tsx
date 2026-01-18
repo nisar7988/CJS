@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { View, FlatList, RefreshControl, Text } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { JobsRepo } from '../../../src/db/repositories/jobs.repo';
 import { Job } from '../../../src/types/models';
 import { EmptyState } from '../../../src/components/common/EmptyState';
 import JobCard from '../../../src/components/jobs/JobCard';
 import { Loader } from '../../../src/components/common/Loader';
-import { FAB } from '../../../src/components/common/FAB';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { FAB } from '../../../src/components/common/FAB';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function JobsList() {
     const router = useRouter();

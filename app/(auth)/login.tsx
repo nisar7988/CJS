@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, KeyboardAvoidingView, ScrollView, Image } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import AppInput from '../../src/components/common/AppInput';
 import AppButton from '../../src/components/common/AppButton';
 import { useAuthStore } from '../../src/store/auth.store';
-import { Image } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
@@ -13,7 +13,7 @@ export default function LoginScreen() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false); // ✅ new state
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -24,7 +24,7 @@ export default function LoginScreen() {
         try {
             await login(email, password);
             router.replace('/');
-        } catch (e) { }
+        } catch { }
     };
 
     return (
@@ -87,7 +87,7 @@ export default function LoginScreen() {
 
                     <Link href="/(auth)/signup" asChild>
                         <Text className="text-center mt-6 text-textMuted">
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <Text className="text-primary font-bold">Sign Up</Text>
                         </Text>
                     </Link>

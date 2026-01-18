@@ -19,18 +19,16 @@ export default function JobVideo({ jobId }: JobVideoProps) {
     const [videos, setVideos] = useState<Video[]>([]);
     const isOnline = useNetworkStore(state => state.isOnline);
 
-    const loadVideos = async () => {
+    const loadVideos = React.useCallback(async () => {
         const allVideos = await VideosRepo.getByJobId(jobId);
         setVideos(allVideos);
-    };
+    }, [jobId]);
 
-    // Load videos on mount and every few seconds to check status updates? 
-    // Or prefer subscribing if possible? For now, poll or interval.
     useEffect(() => {
         loadVideos();
-        const interval = setInterval(loadVideos, 2000); // Check for status updates
+        const interval = setInterval(loadVideos, 2000);
         return () => clearInterval(interval);
-    }, [jobId]);
+    }, [jobId, loadVideos]);
 
     const handleUpload = async () => {
         try {
@@ -82,8 +80,7 @@ export default function JobVideo({ jobId }: JobVideoProps) {
             // 1. Save to Local DB
             await VideosRepo.add(newVideo);
 
-            // 2. Add to Sync Queue
-            // We need to pass the JobId too so SyncManager knows which job this belongs to
+
             await SyncQueueRepo.add('VIDEO_UPLOAD', {
                 clientVideoId: clientVideoId,
                 jobId: jobId

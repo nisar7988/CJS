@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, Pressable, ScrollView, RefreshControl } from "react-native";
+import { View, Text, ScrollView, RefreshControl } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
-import JobCard from "../../src/components/jobs/JobCard";
+// import JobCard from "../../src/components/jobs/JobCard";
 import AppSearchBar from "../../src/components/common/AppSearchBar";
 import HomeHeader from "../../src/components/home/HomeHeader";
 import { JobsRepo } from "../../src/db/repositories/jobs.repo";

@@ -28,6 +28,7 @@ api.interceptors.response.use(
         console.log("error in api", error)
         if (error.response?.status === 401 && error.config?.url !== API.AUTH.LOGOUT) {
             await storage.removeItem('auth_token');
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { useAuthStore } = require('../store/auth.store');
             useAuthStore.getState().logout();
         }

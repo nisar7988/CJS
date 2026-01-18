@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, KeyboardAvoidingView, ScrollView, Image } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import AppInput from '../../src/components/common/AppInput';
 import { useAuthStore } from '../../src/store/auth.store';
-import { Image } from 'react-native';
+
 import AppButton from '../../src/components/common/AppButton';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -25,7 +25,7 @@ export default function SignupScreen() {
             await signup(email, password, name);
             // Auto login successful, navigate to home
             router.replace('/');
-        } catch (e) {
+        } catch {
             // Error handled in store
         }
     };
