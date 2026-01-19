@@ -124,3 +124,12 @@ Video uploads are handled separately with a retry mechanism:
 4.  **Run on device/emulator**
     -   Android: `npm run android`
     -   iOS: `npm run ios`
+
+### Run on physical device (Expo Go)
+
+- Install Expo Go from Play Store (Android) or App Store (iOS).
+- Connect your phone and computer to the same Wi‑Fi network.
+- Start the dev server with `npm start`; a QR code will appear.
+- Open Expo Go and scan the QR code or enter the URL shown.
+- If LAN fails, switch the connection mode to “Tunnel” and try again.
+
