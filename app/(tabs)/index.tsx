@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from "react";
-import { View, Text } from "react-native";
 import { useFocusEffect, useRouter } from "expo-router";
-// import JobCard from "../../src/components/jobs/JobCard";
-import AppSearchBar from "../../src/components/common/AppSearchBar";
-import HomeHeader from "../../src/components/home/HomeHeader";
-import { JobsRepo } from "../../src/db/repositories/jobs.repo";
-import { Job } from "../../src/types/models";
-import { FAB } from "../../src/components/common/FAB";
-import { JobList } from "../../src/components/jobs/JobList";
+import React, { useCallback, useEffect, useState } from "react";
+import { Text, View } from "react-native";
 import { useAuthStore } from "@/store/auth.store";
+import AppSearchBar from "../../src/components/common/AppSearchBar";
+import { FAB } from "../../src/components/common/FAB";
+import HomeHeader from "../../src/components/home/HomeHeader";
+import { JobList } from "../../src/components/jobs/JobList";
+import { JobsRepo } from "../../src/db/repositories/jobs.repo";
+import { SyncManager } from "../../src/sync/syncManager";
+import { Job } from "../../src/types/models";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -26,6 +26,19 @@ export default function HomeScreen() {
     }
   };
 
+  useEffect(() => {
+    const bootstrap = async () => {
+      setLoading(true);
+      try {
+        await SyncManager.pullUpdates();
+      } catch (e) {
+        console.error(e)
+      } finally {
+        await loadJobs();
+      }
+    };
+    bootstrap();
+  }, []);
   useFocusEffect(
     useCallback(() => {
       loadJobs();
@@ -38,10 +51,7 @@ export default function HomeScreen() {
         <HomeHeader userName={user?.name} />
 
         {/* Search Bar */}
-        <AppSearchBar
-          containerStyle="mt-4"
-          placeholder="Search jobs..."
-        />
+        <AppSearchBar containerStyle="mt-4" placeholder="Search jobs..." />
       </View>
       <JobList
         jobs={jobs}
@@ -51,9 +61,7 @@ export default function HomeScreen() {
         ListHeaderComponent={
           <View className="px-6 pt-6">
             <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-lg font-semibold text-gray-900">
-                Your Jobs ({jobs.length})
-              </Text>
+              <Text className="text-lg font-semibold text-gray-900">Your Jobs ({jobs.length})</Text>
             </View>
           </View>
         }
