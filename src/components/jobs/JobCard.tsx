@@ -16,7 +16,7 @@ export default function JobCard({ job, onPress }: JobCardProps) {
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={0.7}
-            className="bg-white rounded-2xl p-5 mb-4 border border-gray-100"
+            className="bg-white rounded-2xl p-5 mb-4 border border-gray-100 mx-6"
             style={{
                 shadowColor: "#000",
                 shadowOpacity: 0.05,
